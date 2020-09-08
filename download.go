@@ -5,33 +5,47 @@ import (
 	"net/url"
 	"os"
 	"os/exec"
+	"path"
 )
 
-const dir = "downloads"
+type Media struct {
+	Id   string
+	Url  string
+	Info os.FileInfo
+}
 
 // Download handles retrieving the v.redd.it media
-func Download(URL string) error {
+func Download(URL string) (Media, error) {
 	u, err := url.Parse(URL)
-	//name := path.Base(URL)
 	if err != nil {
 		log.Fatalf("Could not parse %v: %v\n", u.Path, err)
 	}
-	err = os.Mkdir(dir, 0755)
+	var m Media
+	m.Url = URL
+	m.Id = path.Base(URL)
+	err = os.MkdirAll(Dir, 0755)
 	if err != nil {
-		log.Printf("Directory not created: %v\n", err)
+		log.Printf("Error creating directory: %v\n", err)
+	}
+	err = os.MkdirAll(path.Join(Dir, m.Id), 0755)
+	if err != nil {
+		log.Printf("Error creating sub-directory: %v\n", err)
 	}
 	cmd := exec.Command(
 		"youtube-dl",
-		"--id",
-		"--write-info-json",
-		"--merge-output-format",
-		"mp4",
+		"-v",
+		"--id",              // use id as name
+		"--write-info-json", // save file information
+		"--restrict-filenames",
+		"--merge-output-format", // Downloading the best available audio and video
+		OutputFormat,
 		URL,
 	)
-	cmd.Dir = dir
+	cmd.Dir = path.Join(Dir, m.Id)
 	err = cmd.Run()
 	if err != nil {
-		log.Fatalf("Could not run %v\n", cmd.Args)
+		log.Fatalf("Failed: %v\n", cmd.Args)
 	}
-	return err
+	m.Info, err = os.Stat(path.Join(cmd.Dir, m.Id+OriginalExt))
+	return m, err
 }
