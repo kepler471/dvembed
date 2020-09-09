@@ -7,6 +7,7 @@ patch=$4
 
 if [[ -z "$package" || -z "$major" || -z "$minor" || -z "$patch" ]]; then
   echo "usage: $0 <package-name> <major-ver-num> <patch-ver-num> <patch-ver-num>"
+  #  Example: ./build.sh dvembed 1 0 8
   exit 1
 fi
 
