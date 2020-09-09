@@ -2,32 +2,27 @@ package main
 
 import (
 	"log"
-	"net/url"
 	"os"
 	"os/exec"
 	"path"
 )
 
-type Media struct {
-	Id   string
-	Url  string
-	Info os.FileInfo
+type rawMedia struct {
+	os.FileInfo
+	Id         string
+	Url        string
+	Path       string
+	Downloaded bool
 }
 
-// Download handles retrieving the v.redd.it media
-func Download(URL string) (Media, error) {
-	u, err := url.Parse(URL)
-	if err != nil {
-		log.Fatalf("Could not parse %v: %v\n", u.Path, err)
+// download handles retrieving the v.redd.it media. Initialises
+// a rawMedia instance for each URL.
+func download(URL string) (*rawMedia, error) {
+	f := rawMedia{
+		Url: URL,
+		Id:  path.Base(URL),
 	}
-	var m Media
-	m.Url = URL
-	m.Id = path.Base(URL)
-	err = os.MkdirAll(Dir, 0755)
-	if err != nil {
-		log.Printf("Error creating directory: %v\n", err)
-	}
-	err = os.MkdirAll(path.Join(Dir, m.Id), 0755)
+	err := os.MkdirAll(path.Join(dir, f.Id), 0755)
 	if err != nil {
 		log.Printf("Error creating sub-directory: %v\n", err)
 	}
@@ -38,18 +33,21 @@ func Download(URL string) (Media, error) {
 		"--write-info-json", // save file information
 		"--restrict-filenames",
 		"--merge-output-format", // Downloading the best available audio and video
-		OutputFormat,
+		outputFormat,
 		URL,
 	)
-	cmd.Dir = path.Join(Dir, m.Id)
-	err = cmd.Run()
-	if err != nil {
+	cmd.Dir = path.Join(dir, f.Id)
+
+	xerr := cmd.Run()
+	if xerr != nil {
 		log.Fatalf("Failed: %v\n", cmd.Args)
 	}
-	m.Info, err = os.Stat(path.Join(cmd.Dir, m.Id+OriginalExt))
+
+	f.Path = path.Join(cmd.Dir, f.Id+originalExt)
+	f.FileInfo, err = os.Stat(f.Path)
 	if err != nil {
 		log.Println("Error finding downloaded file")
 	}
 	// TODO want to return output error from youtube-dl
-	return m, nil
+	return &f, xerr
 }
