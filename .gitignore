@@ -1,5 +1,8 @@
-.gitignore
-
+# Discord bot secret Token
 TOKEN.go
 
+# Local media
 downloads/
+
+# Binaries
+releases/
