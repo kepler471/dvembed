@@ -8,16 +8,15 @@ import (
 )
 
 type convertedMedia struct {
-	rawMedia
-	Ext string
+	os.FileInfo
+	Id   string
+	Path string
 }
-
-
 
 // format handles file conversion and formatting with ffmpeg.
 // Discord allows a maximum 8MB file upload, so this is only
 // required if the size limit is exceeded.
-func format(f rawMedia) (*convertedMedia, error) {
+func format(f media) (*convertedMedia, error) {
 	cmd := exec.Command(
 		"cmd",
 		"-i "+f.Name(),
@@ -32,13 +31,15 @@ func format(f rawMedia) (*convertedMedia, error) {
 	if err != nil {
 		log.Fatalf("Failed: %v\n", cmd.Args)
 	}
-	var cm convertedMedia
-	cm.Path = path.Join(cmd.Dir, f.Id+convertedExt)
-	cm.rawMedia.FileInfo, err = os.Stat(cm.Path)
-	cm.
+	cm := convertedMedia{
+		FileInfo: nil,
+		Id:       f.Id,
+		Path:     "",
+	}
+	cm.FileInfo, err = os.Stat(cm.Path)
 	if err != nil {
-		log.Println("Error finding formatted file")
+		log.Print("Error finding formatted file")
 	}
 	// TODO want to return output error from ffmpeg
-	return f, nil
+	return &cm, nil
 }

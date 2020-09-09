@@ -20,19 +20,18 @@ const (
 func main() {
 	err := os.MkdirAll(dir, 0755)
 	if err != nil {
-		log.Printf("Error creating base download directory: %v\n", err)
+		log.Printf("Error creating base download directory: %v", err)
 	}
 
 	dg, err := discordgo.New("Bot " + TOKEN)
 	if err != nil {
-		log.Fatalln("Error creating session: ", err)
+		log.Fatal("Error creating session: ", err)
 	}
 	dg.AddHandler(messageCreate)
 	dg.Identify.Intents = discordgo.MakeIntent(discordgo.IntentsGuildMessages)
 	err = dg.Open()
 	if err != nil {
-		log.Print("Error opening Discord connection, ", err)
-		return
+		log.Fatal("Error opening Discord connection, ", err)
 	}
 	log.Print("dvembed bot is now running. Press CTRL-C to exit.")
 	sc := make(chan os.Signal, 1)
@@ -44,7 +43,7 @@ func main() {
 	//app.Name = "dvembed"
 	//app.Description = "Properly embeds media from v.redd.it"
 	//app, err = dg.ApplicationCreate(app)
-	//log.Printf("ApplicationCreate: err: %+v, app: %+v\n", err, app)
+	//log.Printf("ApplicationCreate: err: %+v, app: %+v", err, app)
 
 }
 
@@ -54,15 +53,15 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 		//c, err := s.State.Channel(m.ChannelID)
 		//if err != nil {
-		//	log.Printf("Could not find channel: %v\n", err)
+		//	log.Printf("Could not find channel: %v", err)
 		//	return
 		//}
 		//g, err := s.State.Guild(c.GuildID)
 		//if err != nil {
-		//	log.Printf("Could not find the guild for channel: %v, %v\n", c, err)
+		//	log.Printf("Could not find the guild for channel: %v, %v", c, err)
 		//	return
 		//}
-		//log.Println(g)
+		//log.Print(g)
 	}
 	switch {
 	case strings.Contains(m.Content, "v.redd.it"):

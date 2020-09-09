@@ -5,38 +5,37 @@ import (
 	"log"
 	"net/url"
 	"os"
-	"path"
 	"strings"
 )
 
 func handleVredditLink(s *discordgo.Session, m *discordgo.MessageCreate) {
 	c := m.ChannelID
-	log.Printf("Message by %s  contains v.redd.it link: %s\n", m.Author.Username, m.Content)
+	log.Printf("Message by %s  contains v.redd.it link: %s", m.Author.Username, m.Content)
 	log.Print("Message sent on channel: ", c)
 	uu := strings.Split(m.Content, " ")
 	for _, u := range uu {
-		if strings.Contains(u, "v.redd.it") {
+		if strings.Contains(u, "v.redd.it") || strings.Contains(u, "reddit.com") {
 			u, err := url.Parse(u)
 			if err != nil {
-				log.Printf("Message segment: `%s`, did not parse as URl: %v\n", u, err)
+				log.Printf("Message segment: `%s`, did not parse as URl: %v", u, err)
 				continue
 			}
-			log.Printf("Message segment: `%s`, is valid URl\n", u)
+			log.Printf("Message segment: `%s`, is valid URl", u)
 			f, err := download(u.String())
 			if err != nil {
-				log.Println("Error downloading f")
+				log.Print("Error downloading f: ", err)
 				continue
 			}
 			if f.Size() > 8000000 {
 				log.Printf("%v bytes is too large for Discord upload", f.Size())
 				continue
 			}
-			blank := &discordgo.MessageEmbed{}
-			_, err = s.ChannelMessageEditEmbed(c, m.ID, blank)
+			blank := discordgo.MessageEmbed{}
+			_, err = s.ChannelMessageEditEmbed(c, m.ID, &blank)
 			if err != nil {
-				log.Printf("Error removing %s's embedded v.redd.it image", m.Author.Username)
+				log.Printf("Error removing %s's embedded v.redd.it image: %v", m.Author.Username, err)
 			}
-			o, err := os.Open(path.Join(dir, f.Id, f.Name()))
+			o, err := os.Open(f.Path)
 			if err != nil {
 				log.Print("Error reading ", f.Name())
 			}
@@ -50,21 +49,21 @@ func handleVredditLink(s *discordgo.Session, m *discordgo.MessageCreate) {
 }
 
 func handleRedditLink(s *discordgo.Session, m *discordgo.MessageCreate) {
-	log.Printf("Message by %s contains reddit link: %s\n", m.Author.Username, m.Content)
-	// TODO check if standard reddit link contains v.redd.it media through reddit api
-	uu := strings.Split(m.Content, " ")
-	for _, u := range uu {
-		if strings.Contains(u, "reddit.com") {
-			u, err := url.Parse(u)
-			if err != nil {
-				log.Printf("Message segment: `%s`, did not parse as URl: %v\n", u, err)
-				continue
-			}
-			log.Printf("Message segment: `%s`, is valid URl\n", u)
-			// getVredditLink(URL)
-			handleVredditLink(s, m)
-		}
-	}
+	log.Printf("Message by %s contains reddit link: %s", m.Author.Username, m.Content)
+	//// TODO check if standard reddit link contains v.redd.it media through reddit api
+	//uu := strings.Split(m.Content, " ")
+	//for _, u := range uu {
+	//	if strings.Contains(u, "reddit.com") {
+	//		u, err := url.Parse(u)
+	//		if err != nil {
+	//			log.Printf("Message segment: `%s`, did not parse as URl: %v", u, err)
+	//			continue
+	//		}
+	//		log.Printf("Message segment: `%s`, is valid URl", u)
+	//		// getVredditLink(URL)
+	//	}
+	//}
+	handleVredditLink(s, m)
 }
 
 func handleImgurTest(s *discordgo.Session, m *discordgo.MessageCreate) {

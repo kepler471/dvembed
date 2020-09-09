@@ -7,12 +7,12 @@ import (
 
 func TestFormat(t *testing.T) {
 	type args struct {
-		m rawMedia
+		m media
 	}
 	tests := []struct {
 		name    string
 		args    args
-		want    rawMedia
+		want    media
 		wantErr bool
 	}{
 		// TODO: Add test cases.
