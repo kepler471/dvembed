@@ -23,7 +23,7 @@ func Format(m Media) (Media, error) {
 	cmd.Dir = path.Join(Dir, m.Id)
 	err := cmd.Run()
 	if err != nil {
-		log.Fatalf("Could not run %v\n", cmd.Args)
+		log.Fatalf("Failed: %v\n", cmd.Args)
 	}
 	m.Info, err = os.Stat(path.Join(cmd.Dir, m.Id+ConvertedExt))
 	return m, err
