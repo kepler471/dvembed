@@ -108,7 +108,7 @@ func handleVredditLink(s *discordgo.Session, m *discordgo.MessageCreate) {
 			}
 			_, err = s.ChannelFileSend(c, file.Info.Name(), o)
 			if err != nil {
-				log.Printf("Error uploading %s's v.redd.it media, %s", m.Author.Username, file.Info.Name())
+				log.Printf("Error uploading %s's media %s, %v", m.Author.Username, file.Info.Name(), err)
 			}
 			_ = o.Close()
 		}
