@@ -47,5 +47,9 @@ func Download(URL string) (Media, error) {
 		log.Fatalf("Failed: %v\n", cmd.Args)
 	}
 	m.Info, err = os.Stat(path.Join(cmd.Dir, m.Id+OriginalExt))
-	return m, err
+	if err != nil {
+		log.Println("Error finding downloaded file")
+	}
+	// TODO want to return output error from youtube-dl
+	return m, nil
 }
