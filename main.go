@@ -18,6 +18,8 @@ const (
 
 // Run the bot client
 func main() {
+	if TOKEN == "" {
+		log.Fatal("Secret token (in token.go) is missing.\nThe token can be found at https://discord.com/developers/applications/")
 	err := os.MkdirAll(dir, 0755)
 	if err != nil {
 		log.Printf("Error creating base download directory: %v", err)
