@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 
 package=$1
 major=$2
