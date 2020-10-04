@@ -39,7 +39,7 @@ func download(URL string) (*media, error) {
 	}
 
 	f.Path = path.Join(cmd.Dir, f.Id+originalExt)
-	if info, err := os.Stat(f.Path); os.IsExist(err) {
+	if info, err := os.Stat(f.Path); !os.IsNotExist(err) {
 		log.Printf("\tFile at %v exists, will not be downlaoded. Err: %v", f.Path, err)
 		f.FileInfo = info
 		return &f, nil
