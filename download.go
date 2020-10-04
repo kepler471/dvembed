@@ -24,7 +24,7 @@ func download(URL string) (*media, error) {
 		"-v",
 		//"--id",              // use id as name
 		"--output",
-		f.Id,
+		f.Id+originalExt,
 		"--write-info-json", // save file information
 		//"--restrict-filenames",
 		"--merge-output-format", // Downloading the best available audio and video
