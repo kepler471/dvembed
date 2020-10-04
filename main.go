@@ -18,7 +18,8 @@ const (
 
 // Run the bot client
 func main() {
-	if TOKEN == "" {
+	if //goland:noinspection GoBoolExpressions
+	TOKEN == "" {
 		log.Fatal("Secret token (in token.go) is missing.\nThe token can be found at https://discord.com/developers/applications/")
 	}
 	err := os.MkdirAll(dir, 0755)
