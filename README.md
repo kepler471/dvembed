@@ -20,7 +20,7 @@ If the media file exceeds 8MB, `dvembed` will attempt to compress or reduce the 
 - `ffmpeg`
 
 ###### Future
-A script will setup a working environment if these programs are not available)
+A script will setup a working environment if these programs are not available.
 
 ## Example
 ![Example](https://github.com/kepler471/dvembed/blob/master/example.png?raw=true)

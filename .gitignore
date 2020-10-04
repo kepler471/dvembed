@@ -6,3 +6,7 @@ downloads/
 
 # Binaries
 releases/
+
+# Go versioning
+go.mod
+go.sum
