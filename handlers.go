@@ -21,15 +21,17 @@ func handleVredditLink(s *discordgo.Session, m *discordgo.MessageCreate) {
 				continue
 			}
 			log.Printf("Message segment: `%s`, is valid URl", u)
+			log.Print("Entering download process >")
 			f, err := download(u.String())
 			if err != nil {
-				log.Print("Error downloading f: ", err)
+				log.Print("Did not download: ", err)
 				continue
 			}
 			if f.Size() > 8000000 {
 				log.Printf("%v bytes is too large for Discord upload", f.Size())
 				continue
 			}
+
 			blank := discordgo.MessageEmbed{}
 			_, err = s.ChannelMessageEditEmbed(c, m.ID, &blank)
 			if err != nil {
@@ -39,11 +41,12 @@ func handleVredditLink(s *discordgo.Session, m *discordgo.MessageCreate) {
 			if err != nil {
 				log.Print("Error reading ", f.Name())
 			}
-			_, err = s.ChannelFileSend(c, f.Name(), o)
+			msg, err := s.ChannelFileSend(c, f.Name(), o)
 			if err != nil {
-				log.Printf("Error uploading %s's media %s, %v", m.Author.Username, f.Name(), err)
+				log.Printf("Error sending %s's media %s, %v", m.Author.Username, f.Name(), err)
 			}
 			_ = o.Close()
+			log.Printf("msg: %v sent on channel: %v in server: %v", msg.ID, msg.ChannelID, msg.GuildID)
 		}
 	}
 }

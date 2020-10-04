@@ -8,6 +8,7 @@ func TestDownloadVRedditLink(t *testing.T) {
 		"https://v.redd.it/5ltubsoyawl51",
 		"https://v.redd.it/dttgnvp69wl51",
 		"https://v.redd.it/e497qwjsh1m51",
+		"https://v.redd.it/b8b0ha50l5g41",
 	}
 	for _, URL := range URLs {
 		_, err := download(URL)

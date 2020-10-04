@@ -34,19 +34,26 @@ func download(URL string) (*media, error) {
 	cmd.Dir = path.Join(dir, f.Id)
 	err := os.MkdirAll(cmd.Dir, 0755)
 	if err != nil {
-		log.Printf("Error creating sub-directory: %v", err)
+		log.Printf("\tError creating sub-directory: %v", err)
 		cmd.Dir = dir
 	}
-	log.Print("...run youtube-dl...")
-	err = cmd.Run()
-	if err != nil {
-		log.Printf("Failed process: %v", cmd.Args)
-		return &f, err
-	}
+
 	f.Path = path.Join(cmd.Dir, f.Id+originalExt)
+	if info, err := os.Stat(f.Path); os.IsExist(err) {
+		log.Printf("\tFile at %v exists, will not be downlaoded. Err: %v", f.Path, err)
+		f.FileInfo = info
+		return &f, nil
+	} else {
+		log.Print("\t...run youtube-dl...")
+		err = cmd.Run()
+		if err != nil {
+			log.Printf("\tFailed youtube-dl process: %v", cmd.Args)
+			return &f, err
+		}
+	}
 	f.FileInfo, err = os.Stat(f.Path)
 	if err != nil {
-		log.Print("Error finding downloaded file: ", err)
+		log.Print("\tError finding downloaded file: ", err)
 	}
 	// TODO want to return output error from youtube-dl
 	return &f, err
