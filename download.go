@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/exec"
 	"path"
+	"fmt"
 )
 
 type media struct {
@@ -19,8 +20,9 @@ func download(URL string) (*media, error) {
 	f := media{
 		Id: path.Base(URL),
 	}
+	dir, _  := os.Getwd()
 	cmd := exec.Command(
-		"youtube-dl",
+		fmt.Sprintf("%v/youtube-dl", dir),
 		"-v",
 		//"--id",              // use id as name
 		"--output",
