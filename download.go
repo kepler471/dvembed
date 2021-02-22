@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"net/url"
 	"os"
 	"os/exec"
 	"path"
@@ -13,11 +14,11 @@ type media struct {
 	Path string
 }
 
-// download handles retrieving the v.redd.it media. Initialises
-// a media instance for each URL.
-func download(URL string) (*media, error) {
+// download handles retrieving the v.redd.it media using youtube-dl.
+// Initialises a media instance for each URL.
+func download(Url *url.URL) (*media, error) {
 	f := media{
-		Id: path.Base(URL),
+		Id: path.Base(Url.String()),
 	}
 	cmd := exec.Command(
 		"youtube-dl",
@@ -29,7 +30,7 @@ func download(URL string) (*media, error) {
 		//"--restrict-filenames",
 		"--merge-output-format", // Downloading the best available audio and video
 		outputFormat,
-		URL,
+		Url.String(),
 	)
 	cmd.Dir = path.Join(dir, f.Id)
 	err := os.MkdirAll(cmd.Dir, 0755)
@@ -40,7 +41,7 @@ func download(URL string) (*media, error) {
 
 	f.Path = path.Join(cmd.Dir, f.Id+originalExt)
 	if info, err := os.Stat(f.Path); !os.IsNotExist(err) {
-		log.Printf("\tFile at %v exists, will not be downlaoded. Err: %v", f.Path, err)
+		log.Printf("\tFile at %v exists, will not be downloaded. Err: %v", f.Path, err)
 		f.FileInfo = info
 		return &f, nil
 	} else {
