@@ -52,7 +52,7 @@ func main() {
 }
 
 func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
-	log.Printf("%v `%v` %v %v", m.Author.Username, m.Content, m.Embeds, &m.Embeds)
+	log.Printf("%v `%v`", m.Author.Username, m.Content)
 	if m.Author.ID == s.State.User.ID {
 		return
 		//c, err := s.State.Channel(m.ChannelID)
