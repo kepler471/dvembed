@@ -69,9 +69,9 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 	switch {
 	case strings.Contains(m.Content, "v.redd.it"):
-		handleVredditLink(s, m)
+		readMessage(s, m)
 	case strings.Contains(m.Content, "reddit.com"):
-		handleRedditLink(s, m)
+		readMessage(s, m)
 	case strings.Contains(m.Content, "test imgur link"):
 		handleImgurTest(s, m)
 	default:
