@@ -1,6 +1,9 @@
 package main
 
-import "testing"
+import (
+	"net/url"
+	"testing"
+)
 
 func TestDownloadVRedditLink(t *testing.T) {
 	URLs := []string{
@@ -9,9 +12,11 @@ func TestDownloadVRedditLink(t *testing.T) {
 		"https://v.redd.it/dttgnvp69wl51",
 		"https://v.redd.it/e497qwjsh1m51",
 		"https://v.redd.it/b8b0ha50l5g41",
+		"https://v.redd.it/zv89llsvexdz",
 	}
 	for _, URL := range URLs {
-		_, err := download(URL)
+		Url, _ := url.Parse(URL)
+		_, err := download(Url)
 		if err != nil {
 			t.Errorf(`youtube-dl %q failed`, URL)
 		}
@@ -22,9 +27,18 @@ func TestDownloadRedditLink(t *testing.T) {
 	URLs := []string{
 		"https://www.reddit.com/r/IdiotsInCars/comments/ioqqbf/i_know_ill_cut_in_front_of_this_semi/",
 		"https://www.reddit.com/r/AnimalsBeingBros/comments/ip89wl/possibly_the_most_patient_kitty_in_the_world_with/",
+		"https://old.reddit.com/r/StarWars/comments/l1l7f6/finished_this_last_night_took_me_30_hours_to/",
+		"https://www.reddit.com/r/videos/comments/6rrwyj/that_small_heart_attack/",
+		"https://www.reddit.com/r/videos/comments/6rrwyj",
+		"https://www.reddit.com/r/MadeMeSmile/comments/6t7wi5/wait_for_it/",
+		"https://old.reddit.com/r/MadeMeSmile/comments/6t7wi5/wait_for_it/",
+		"https://www.reddit.com/r/videos/comments/6t7sg9/comedians_hilarious_joke_about_the_guam_flag/",
+		"https://www.reddit.com/r/videos/comments/6t75wq/southern_man_tries_to_speak_without_an_accent/",
+		"https://nm.reddit.com/r/Cricket/comments/8idvby/lousy_cameraman_finds_himself_in_cairns_line_of/",
 	}
 	for _, URL := range URLs {
-		_, err := download(URL)
+		Url, _ := url.Parse(URL)
+		_, err := download(Url)
 		if err != nil {
 			t.Errorf(`youtube-dl %q failed`, URL)
 			// The following logs were producing some errors, have been removed
