@@ -12,7 +12,7 @@ if [[ -z "$package" || -z "$major" || -z "$minor" || -z "$patch" ]]; then
 fi
 
 # add more architectures
-platforms=("windows/amd64" "linux/amd64" "darwin/amd64")
+platforms=("windows/amd64" "linux/amd64" "darwin/amd64" "darwin/arm64")
 zip=""
 
 for platform in "${platforms[@]}"
@@ -21,7 +21,7 @@ do
   GOOS=${platform_split[0]}
   GOARCH=${platform_split[1]}
 
-  path=releases/v"$major"/"$minor"/"$patch"/"$GOOS"/"$package"
+  path=releases/v"$major"/"$minor"/"$patch"/"$GOOS""-""$GOARCH"/"$package"
 
   if [ $GOOS = "windows" ]; then
     path+='.exe'
@@ -34,7 +34,7 @@ do
     exit 1
   fi
 
-  zip+="$GOOS"" "
+  zip+="$GOOS""-""$GOARCH"" "
 done
 
 tar -czf releases/v"$major"/"$minor"/"$patch"/dvembed.tar.gz -C releases/v"$major"/"$minor"/"$patch" $zip
