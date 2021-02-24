@@ -19,7 +19,7 @@ const (
 
 // Run the bot client
 func main() {
-	flag.StringVar(&TOKEN, "t", "", "Bot token")
+	flag.StringVar(&TOKEN, "t", TOKEN, "Bot token")
 	flag.Parse()
 	if //goland:noinspection GoBoolExpressions
 	TOKEN == "" {
