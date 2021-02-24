@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"github.com/bwmarrin/discordgo"
 	"log"
 	"os"
@@ -18,9 +19,14 @@ const (
 
 // Run the bot client
 func main() {
+	flag.StringVar(&TOKEN, "t", "", "Bot token")
+	flag.Parse()
 	if //goland:noinspection GoBoolExpressions
 	TOKEN == "" {
-		log.Fatal("Secret token (in token.go) is missing.\nThe token can be found at https://discord.com/developers/applications/")
+		log.Fatal(
+			"Secret token is missing. The token can be stored in token.go, or can be passed as\n " +
+				"a command line argument when the bot is run.\n" +
+				"Your token can be found at https://discord.com/developers/applications/")
 	}
 	err := os.MkdirAll(dir, 0755)
 	if err != nil {
@@ -35,7 +41,7 @@ func main() {
 	dg.Identify.Intents = discordgo.MakeIntent(discordgo.IntentsGuildMessages)
 	err = dg.Open()
 	if err != nil {
-		log.Fatal("Error opening Discord connection, ", err)
+		log.Fatalf("Error opening Discord connection, %v", err)
 	}
 	log.Print("dvembed bot is now running. Press CTRL-C to exit.")
 	sc := make(chan os.Signal, 1)

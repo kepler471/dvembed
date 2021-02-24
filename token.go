@@ -1,3 +1,3 @@
 package main
 
-const TOKEN = ""
+var TOKEN = ""
