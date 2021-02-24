@@ -7,20 +7,37 @@ v.redd.it media can now be embedded nicely within Discord, without having to lea
 thread.
 
 ###### Future
-If the media file exceeds 8MB, `dvembed` will attempt to compress or reduce the file size with `ffmpeg`.
+- If the media file exceeds 8 MB, `dvembed` will attempt to use alternate versions of the file hosted by v.redd.it.
+- Some larger will not have alternate versions that do not exceed the 8 MB limit. The bot will attempt to compress and reduce the file size with `ffmpeg`.
 
 ## Usage
-`dvembed`, or `go run dvembed` to run without executable
+Currently, this is a private bot, and so you will need to create a Discord Application, with a Bot User, and then generate a token. Please visit the [Discord developer site](https://discord.com/developers/).
+
+Run the bot with an executable (or directly from source with go run)
+
+`dvembed -t SECRET-TOKEN`
+
+or, to have run as a background process (Linux/Unix only):
+
+`nohup dvembed -t SECRET-TOKEN &`
+
+By default, output will be sent to the file `nohup.out`, but you can specify with 
+
+`nohup dvembed -t SECRET-TOKEN ./dvembed.log`
+
+### Token
+Flag: `-t SECRET-TOKEN`
+
+Token can also be added to `token.go` if building from source, so you can omit the flag.
 
 ## Requirements
 - `Python (2.6, 2.7, 3.2+)`
 
 - `youtube-dl`
 
-- `ffmpeg`
-
 ###### Future
-A script will setup a working environment if these programs are not available. The alternatives to this would be finding Go implementations of the requirements, or create a docker container.
+- The functionality that `youtube-dl` provides will be shifted to Go code, so will not be required in the future.
+- `ffmpeg` will be a soft requirement for larger videos.
 
 ## Example
 ![Example](https://github.com/kepler471/dvembed/blob/master/example.png?raw=true)
