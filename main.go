@@ -54,34 +54,14 @@ func main() {
 	//app.Description = "Properly embeds media from v.redd.it"
 	//app, err = dg.ApplicationCreate(app)
 	//log.Printf("ApplicationCreate: err: %+v, app: %+v", err, app)
-
 }
 
 func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	log.Printf("%v `%v`", m.Author.Username, m.Content)
-	if m.Author.ID == s.State.User.ID {
-		return
-		//c, err := s.State.Channel(m.ChannelID)
-		//if err != nil {
-		//	log.Printf("Could not find channel: %v", err)
-		//	return
-		//}
-		//g, err := s.State.Guild(c.GuildID)
-		//if err != nil {
-		//	log.Printf("Could not find the guild for channel: %v, %v", c, err)
-		//	return
-		//}
-		//log.Print(g)
-	}
-	switch {
-	case strings.Contains(m.Content, "v.redd.it"):
-		readMessage(s, m)
-	case strings.Contains(m.Content, "reddit.com"):
-		readMessage(s, m)
-	case strings.Contains(m.Content, "test imgur link"):
-		handleImgurTest(s, m)
-	default:
+	if m.Author.ID == s.State.User.ID && !strings.Contains(m.Content, "BOT-READABLE") {
 		return
 	}
-
+	if strings.Contains(m.Content, "v.redd.it") || strings.Contains(m.Content, "reddit.com") {
+		readMessage(s, m)
+	}
 }
