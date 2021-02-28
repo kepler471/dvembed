@@ -35,9 +35,10 @@ Token can also be added to `token.go` if building from source, so you can omit t
 
 - `youtube-dl`
 
+- `ffmpeg`
+
 ###### Future
 - The functionality that `youtube-dl` provides will be shifted to Go code, so will not be required in the future.
-- `ffmpeg` will be a soft requirement for larger videos.
 
 ## Example
 ![Example](https://github.com/kepler471/dvembed/blob/master/example.png?raw=true)
