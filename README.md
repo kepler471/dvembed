@@ -1,7 +1,7 @@
 # dvembed
 (D)iscord (v).redd.it media (embed)der
 
-`dvembed` uses `youtube-dl` to download v.redd.it media, at the highest available audio and video quality.
+`dvembed` uses `youtube-dl` to download v.redd.it / vreddit media, at the highest available audio and video quality.
 If the media file is smaller than the 8MB Discord file upload limit, the bot will post the file, meaning 
 v.redd.it media can now be embedded nicely within Discord, without having to leave the app and view the 
 thread.
