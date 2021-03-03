@@ -12,9 +12,8 @@ type BaseUrl struct {
 }
 
 // decode returns all variations of BaseUrl in a DASHPlaylist.mpd file.
-func decode(fileName string) []string {
-	f, _ := os.Open(fileName)
-	dec := xml.NewDecoder(f)
+func decode(mpd io.Reader) []string {
+	dec := xml.NewDecoder(mpd)
 	var stack []string
 	for {
 		tok, err := dec.Token()
