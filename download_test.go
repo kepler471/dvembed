@@ -16,7 +16,7 @@ func TestDownloadVRedditLink(t *testing.T) {
 	}
 	for _, URL := range URLs {
 		Url, _ := url.Parse(URL)
-		_, err := download(Url)
+		_, err := youtubeDlDownload(Url)
 		if err != nil {
 			t.Errorf(`youtube-dl %q failed`, URL)
 		}
@@ -38,7 +38,7 @@ func TestDownloadRedditLink(t *testing.T) {
 	}
 	for _, URL := range URLs {
 		Url, _ := url.Parse(URL)
-		_, err := download(Url)
+		_, err := youtubeDlDownload(Url)
 		if err != nil {
 			t.Errorf(`youtube-dl %q failed`, URL)
 			// The following logs were producing some errors, have been removed
