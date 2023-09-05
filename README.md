@@ -31,10 +31,6 @@ Flag: `-t SECRET-TOKEN`
 Token can also be added to `token.go` if building from source, so you can omit the flag.
 
 ## Requirements
-- `Python (2.6, 2.7, 3.2+)`
-
-- `youtube-dl`
-
 - `ffmpeg`
 
 ###### Future
