@@ -11,6 +11,19 @@ type BaseUrl struct {
 	Data string `xml:",chardata"`
 }
 
+type DashVideo int
+
+const (
+	K_600 DashVideo = iota
+	M_1_2
+	M_2_4
+	M_4_8
+	R_240
+	R_360
+	R_480
+	R_720
+)
+
 // decode returns all variations of BaseUrl in a DASHPlaylist.mpd file.
 func decode(mpd io.Reader) []string {
 	dec := xml.NewDecoder(mpd)

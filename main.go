@@ -2,20 +2,23 @@ package main
 
 import (
 	"flag"
-	"github.com/bwmarrin/discordgo"
 	"log"
 	"os"
 	"os/signal"
-	"strings"
 	"syscall"
+
+	"github.com/bwmarrin/discordgo"
 )
 
 const (
-	dir          = "downloads"
-	outputFormat = "mp4"
-	originalExt  = "." + outputFormat
-	convertedExt = ".webm"
+	dir              = "downloads"
+	outputFormat     = "mp4"
+	originalExt      = "." + outputFormat
+	convertedExt     = ".webm"
+	messageSizeLimit = 8_000_000
 )
+
+// TODO: use go embed for token
 
 // Run the bot client
 func main() {
@@ -37,15 +40,17 @@ func main() {
 	if err != nil {
 		log.Fatal("Error creating session: ", err)
 	}
+
 	dg.AddHandler(messageCreate)
-	dg.Identify.Intents = discordgo.MakeIntent(discordgo.IntentsGuildMessages)
+	dg.Identify.Intents = discordgo.IntentsGuildMessages
 	err = dg.Open()
 	if err != nil {
 		log.Fatalf("Error opening Discord connection, %v", err)
 	}
+
 	log.Print("dvembed bot is now running. Press CTRL-C to exit.")
 	sc := make(chan os.Signal, 1)
-	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
+	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, syscall.SIGTERM)
 	<-sc
 	_ = dg.Close()
 
@@ -54,14 +59,4 @@ func main() {
 	//app.Description = "Properly embeds media from v.redd.it"
 	//app, err = dg.ApplicationCreate(app)
 	//log.Printf("ApplicationCreate: err: %+v, app: %+v", err, app)
-}
-
-func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
-	log.Printf("%v `%v`", m.Author.Username, m.Content)
-	if m.Author.ID == s.State.User.ID && !strings.Contains(m.Content, "BOT-READABLE") {
-		return
-	}
-	if strings.Contains(m.Content, "v.redd.it") || strings.Contains(m.Content, "reddit.com") {
-		readMessage(s, m)
-	}
 }
