@@ -16,10 +16,11 @@ type convertedMedia struct {
 
 // mux uses ffmpeg to merge the video from one file with the audio from another.
 // The command used:
-// ffmpeg -y -loglevel repeat+info \
-//	-i file:video.mp4 \
-//	-i file:audio.mp4 \
-//	-c copy -map 0:v:0 -map 1:a:0 file:output.mp4
+//
+//	ffmpeg -y -loglevel repeat+info \
+//		-i file:video.mp4 \
+//		-i file:audio.mp4 \
+//		-c copy -map 0:v:0 -map 1:a:0 file:output.mp4
 func mux(video, audio, output, cwd string) error {
 	cmd := exec.Command(
 		"ffmpeg",
